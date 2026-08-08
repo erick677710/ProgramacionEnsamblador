@@ -1,0 +1,44 @@
+     1                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     2                                  ;assemble and link with 
+     3                                  ;set path
+     4                                  ;path C:\emsamblador\Mingw64\bin
+     5                                  ;assemble: -->> nasm -f win64 -o MAY.o MAY.asm -l MAY.lst
+     6                                  ;link:	   -->> gcc -o MAY MAY.o
+     7                                  ;run:      -->> MAY
+     8                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     9                                  ;-----------------------------------------
+    10                                  
+    11                                  ;file: MAY-min.asm		 ;nombre del programa
+    12                                  ;Convertir caracter "minuscula" a "MAYUSCULA"
+    13                                  
+    14                                  extern printf, scanf		
+    15                                  
+    16                                  segment .data
+    17                                  ;aqui se declaran variables inicializadas
+    18 00000000 41                      MAY	DB	"A"
+    19                                  		
+    20                                  segment .bss
+    21                                  ;aqui van las variables declaradas pero sin inicializar
+    22 00000000 <res 00000001>          min		resb	1
+    23                                  
+    24                                  segment .text 
+    25                                  
+    26                                  global main 					
+    27                                  main:
+    28 00000000 90                      	nop
+    29 00000001 31C0                    	xor eax, eax
+    30 00000003 8A0425[00000000]        	mov al, [MAY]	;0x41
+    31 0000000A 0C20                    	OR al, 0x20		;mascara al= 0x61=0b0110_0001
+    32 0000000C 880425[00000000]        	mov [min], al
+    33                                  	
+    34 00000013 90                      	nop
+    35 00000014 31C0                    	xor eax, eax
+    36 00000016 8A0425[00000000]        	mov al, [MAY]	;0x41
+    37 0000001D 0420                    	ADD al, 0x20	;al= 0x61=0b0110_0001
+    38 0000001F 880425[00000000]        	mov [min], al	
+    39 00000026 C3                      ret
+    40                                  	
+    41                                  
+    42                                  
+    43                                  
+    44                                  

@@ -1,0 +1,39 @@
+     1                                  
+     2                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     3                                  ;assemble and link with 
+     4                                  ;set path
+     5                                  ;path C:\emsamblador\Mingw64\bin
+     6                                  ;assemble: -->> nasm -f win64 -o IDIV-64-V1.o IDIV-64-V1.asm -l IDIV-64-V1.lst
+     7                                  ;link:	   -->> gcc -o IDIV-64-V1 IDIV-64-V1.o
+     8                                  ;run:      -->> IDIV-64-V1
+     9                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    10                                  ;-----------------------------------------
+    11                                  
+    12                                  ;file: IDIV-64.asm
+    13                                  
+    14                                  segment .data
+    15 00000000 CCCCCC0C                a	DD	214_748_364		  ;0xCCC_CCCC
+    16 00000004 3075                    b	DW	     30_000		  ;0x7530
+    17                                  
+    18 00000006 00204AA9D1010000        c	DQ  2_000_000_000_000 ;0x1D1A94A2000
+    19 0000000E E0930400                d	DD	          300_000 ;0x493E0
+    20                                  		
+    21                                  segment .text 
+    22                                  global main					
+    23                                  main:
+    24                                  ;-------------------
+    25                                  ;---division 32 bits
+    26 00000000 668B0425[00000000]      	mov ax, [a]
+    27 00000008 668B1425[02000000]      	mov dx, [a+2]
+    28 00000010 668B1C25[04000000]      	mov bx, [b]
+    29 00000018 66F7FB                  	idiv bx
+    30                                  	
+    31                                  ;---division 64 bits	
+    32 0000001B 8B0425[06000000]        	mov eax, [c]
+    33 00000022 8B1425[0A000000]        	mov edx, [c+4]
+    34 00000029 8B1C25[0E000000]        	mov ebx, [d]
+    35 00000030 F7FB                    	idiv ebx
+    36 00000032 C3                      ret
+    37                                  
+    38                                  
+    39                                  
