@@ -1,0 +1,28 @@
+1.	R(A); 		//lee A											1.	R(A)		//lee A.
+2.	A=A+100	// incrementa A en 100								2.	A=A*2		// duplica el valor de A
+3.	W(A)  		//escribe el nuevo valor de A.					3.	W(A)  		// escribe el resultado A en la BD
+4.	R(B)		//lee B	`										4.	R(B)		//lee B
+5.	B=B+100	// incrementa el valor B en 100 en memoria			5.	B=B*2		//duplica el valor de B en memoria
+6.	W(B)  		// escribe el nuevo valor de B.					6.	W(B)  		//escribe el resultado B en la BD
+
+1. Lx(A)      -- Bloqueo exclusivo para A
+2. R(A)       -- Lee A
+3. A = A + 100 -- Incrementa A en 100
+4. W(A)       -- Escribe el nuevo valor de A en la base de datos
+5. U(A)       -- Libera el bloqueo exclusivo de A
+6. Lx(B)      -- Bloqueo exclusivo para B
+7. R(B)       -- Lee B
+8. B = B + 100 -- Incrementa B en 100
+9. W(B)       -- Escribe el nuevo valor de B en la base de datos
+10. U(B)      -- Libera el bloqueo exclusivo de B
+
+1. Lx(A)      -- Bloqueo exclusivo para A
+2. R(A)       -- Lee A
+3. A = A * 2   -- Duplica A
+4. W(A)       -- Escribe el nuevo valor de A en la base de datos
+5. U(A)       -- Libera el bloqueo exclusivo de A
+6. Lx(B)      -- Bloqueo exclusivo para B
+7. R(B)       -- Lee B
+8. B = B * 2   -- Duplica B
+9. W(B)       -- Escribe el nuevo valor de B en la base de datos
+10. U(B)      -- Libera el bloqueo exclusivo de B

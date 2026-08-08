@@ -1,0 +1,39 @@
+     1                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     2                                  ;assemble and link with 
+     3                                  ;set path
+     4                                  ;path C:\emsamblador\Mingw64\bin
+     5                                  ;assemble: -->> nasm -f win64 -o prueba.o prueba.asm -l prueba.lst
+     6                                  ;link:	   -->> gcc -o prueba prueba.o
+     7                                  ;run:      -->> prueba
+     8                                  ;debugger: -->> x64dbg
+     9                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    10                                  ;-----------------------------------------
+    11                                  
+    12                                  ;file: legal.asm
+    13                                  ;El operando puede ser un registro de 16 o 64 bits, 
+    14                                  ;una posición de memoria de 16 o 64 bits o 
+    15                                  ;un valor inmediato de 8, 16 o 32 bits extendido a 64 bits.
+    16                                  		
+    17                                  segment .data
+    18 00000000 8877665544332211        a	dq  0x1122334455667788
+    19 00000008 BBAA                    b	dw  0xAABB
+    20                                  
+    21                                  segment .bss
+    22                                  
+    23                                  segment .text 
+    24                                  global main 					
+    25                                  main:
+    26 00000000 48B82211FFEEDDCCBB-     mov rax, 0xAABBCCDDEEFF1122
+    26 00000009 AA                 
+    27                                  ;--------------------------
+    28                                  
+    29                                  	
+    30                                  ;--- 16-bit PUSH instruction-----------------
+    31 0000000A 66BBBBAA                	mov bx, 0xAABB			; 16-bit register zero-extended to 64 bits
+    32 0000000E 6653                    	push    bx
+    33 00000010 66FF3425[08000000]      	push    word[b]
+    34 00000018 6653                    	push    bx
+    35 0000001A 66FF3425[08000000]      	push    word[b]
+    36 00000022 6653                    	push    bx
+    37 00000024 66FF3425[08000000]      	push    word[b]
+    38 0000002C C3                      ret

@@ -1,0 +1,109 @@
+     1                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     2                                  ;assemble and link with 
+     3                                  ;set path
+     4                                  ;path C:\emsamblador\Mingw64\bin
+     5                                  ;assemble: -->> nasm -f win64 -o ex3.o ex3.asm -l ex3.lst
+     6                                  ;link:	   -->> gcc -o ex3 ex3.o
+     7                                  ;run:      -->> ex3
+     8                                  ;debugger: -->> x64dbg
+     9                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    10                                  ;-----------------------------------------
+    11                                  
+    12                                  ;file: legal.asm
+    13                                  ;El operando puede ser un registro de 16 o 64 bits, 
+    14                                  ;una posición de memoria de 16 o 64 bits o 
+    15                                  ;un valor inmediato de 8, 16 o 32 bits extendido a 64 bits.
+    16                                  extern printf,scanf,gets,strlen
+    17                                  segment .data
+    18 00000000 636164656E61202573-     prueba db "cadena %s    cantidad de caracteres : %d",10,0
+    18 00000009 2020202063616E7469-
+    18 00000012 646164206465206361-
+    18 0000001B 726163746572657320-
+    18 00000024 3A2025640A00       
+    19 0000002A 657269636B20656C20-     msjp	db "erick el huevo",0
+    19 00000033 687565766F00       
+    20 00000039 496E67726573617220-     msj1	db "Ingresar umero en el arreglo: ",0
+    20 00000042 756D65726F20656E20-
+    20 0000004B 656C2061727265676C-
+    20 00000054 6F3A2000           
+    21 00000058 6C6120636164656E61-     msj2	db "la cadena tiene un total de %d :(digitos + letras mayuscula + letras minusculas)",0
+    21 00000061 207469656E6520756E-
+    21 0000006A 20746F74616C206465-
+    21 00000073 202564203A28646967-
+    21 0000007C 69746F73202B206C65-
+    21 00000085 74726173206D617975-
+    21 0000008E 7363756C61202B206C-
+    21 00000097 6574726173206D696E-
+    21 000000A0 757363756C61732900 
+    22 000000A9 255300                  fmt		db "%S",0
+    23                                  segment .bss
+    24 00000000 <res 00000065>          arreglo resb 101
+    25 00000065 <res 00000008>          cantidad resq 1
+    26                                  segment .text 
+    27                                  global main 					
+    28                                  main:
+    29                                  ;--------------------------
+    30 00000000 4883EC20                sub rsp, 0x20	
+    31                                  
+    32 00000004 48B9-                   mov rcx,msjp
+    32 00000006 [2A00000000000000] 
+    33 0000000E E8(00000000)            call strlen
+    34 00000013 48890425[65000000]      mov  qword[cantidad],RAX
+    35                                  
+    36 0000001B 48B9-                   mov rcx,prueba
+    36 0000001D [0000000000000000] 
+    37 00000025 48BA-                   mov rdx,msjp
+    37 00000027 [2A00000000000000] 
+    38 0000002F 4C8B0425[65000000]      mov r8,[cantidad]
+    39 00000037 E8(00000000)            call printf
+    40                                  
+    41 0000003C 48B9-                   mov rcx,msjp
+    41 0000003E [2A00000000000000] 
+    42 00000046 488B1425[65000000]      mov rdx,[cantidad]
+    43 0000004E E817000000              call contar
+    44                                  
+    45 00000053 48B9-                   mov rcx,msj2
+    45 00000055 [5800000000000000] 
+    46 0000005D 4889C2                  mov rdx,RAX
+    47 00000060 E8(00000000)            call printf
+    48 00000065 4883C420                add rsp, 0x20	
+    49                                  ;--- 16-bit PUSH instruction-----------------
+    50 00000069 C3                      ret
+    51                                  
+    52                                  contar:
+    53 0000006A 4831F6                  		 xor rsi,rsi 
+    54 0000006D 4D31D2                  		 xor r10,r10  
+    55 00000070 4D31DB                  		 xor r11,r11 
+    56 00000073 4D31E4                  		 xor r12,r12   
+    57 00000076 4D31ED                  		 xor r13,r13  
+    58 00000079 4D31F6                  		 xor r14,r14   
+    59 0000007C 4831C0                  		 xor rax,rax
+    60                                  		 ciclo:
+    61                                  		 
+    62 0000007F 448A1431                		 mov r10b,[rcx+rsi]
+    63 00000083 4983FA30                		 cmp r10,0x30
+    64 00000087 7C23                    		 jl siguiente
+    65 00000089 4983FA39                		 cmp r10,0x39
+    66 0000008D 7E1A                    		 jle entra
+    67                                  		 
+    68                                  		 
+    69 0000008F 4180FA41                		 cmp r10b,0x41
+    70 00000093 7C17                    		 jl siguiente
+    71 00000095 4180FA5A                		 cmp r10b,0x5A
+    72 00000099 7E0E                    		 jle entra
+    73                                  		 
+    74 0000009B 4180FA61                		 cmp r10b,0x61
+    75 0000009F 7C0B                    		 jl siguiente
+    76 000000A1 4180FA7A                		 cmp r10b,0x7A
+    77 000000A5 7E02                    		 jle entra
+    78 000000A7 7F03                    		 jg siguiente
+    79                                  		 
+    80                                  		 entra:
+    81 000000A9 48FFC0                  		 inc RAX
+    82                                  		 
+    83                                  		 siguiente:
+    84 000000AC 48FFC6                  		 inc rsi
+    85 000000AF 49FFC6                  		 inc r14
+    86 000000B2 4939D6                  		 cmp r14,rdx
+    87 000000B5 7CC8                    		 jl ciclo
+    88 000000B7 C3                      	ret

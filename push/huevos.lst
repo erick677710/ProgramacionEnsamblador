@@ -1,0 +1,38 @@
+     1                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     2                                  ;assemble and link with 
+     3                                  ;set path
+     4                                  ;path C:\emsamblador\Mingw64\bin
+     5                                  ;assemble: -->> nasm -f win64 -o huevos.o huevos.asm -l huevos.lst
+     6                                  ;link:	   -->> gcc -o huevos huevos.o
+     7                                  ;run:      -->> huevos
+     8                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     9                                  ;-----------------------------------------
+    10                                  
+    11                                  ;file: huevos.asm (nombre programa)
+    12                                  
+    13                                  extern printf, scanf		
+    14                                  
+    15                                  segment .data
+    16                                  ;aqui se declaran variables inicializadas
+    17 00000000 0A0014001E00280032-     a dw 10,20,30,40,50,60
+    17 00000009 003C00             
+    18                                  segment .bss
+    19                                  ;Block Started by Symbol(BSS) 
+    20                                  ;aqui van las variables declaradas pero sin inicializar
+    21                                  segment .text 
+    22                                  
+    23                                  global main 					
+    24                                  main:	
+    25                                  ;etiqueta que indica el comienzo del programa principal
+    26                                  ;aqui van las instrucciones
+    27 00000000 4831C9                  xor rcx,rcx
+    28 00000003 B906000000              mov rcx,6
+    29 00000008 4831DB                  xor rbx,rbx
+    30 0000000B BB00000000              mov rbx,0
+    31                                  no:
+    32 00000010 FF34DD[00000000]        push qword[a,rbx*8]
+    33 00000017 48FFC3                  inc rbx
+    34 0000001A E2F4                    loop no
+    35 0000001C C3                      ret
+    36                                  ;---------------------------------------
+    37                                  ;..........subrutinas....................	

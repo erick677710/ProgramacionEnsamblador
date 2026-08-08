@@ -1,0 +1,52 @@
+     1                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     2                                  ;assemble and link with 
+     3                                  ;set path
+     4                                  ;path C:\emsamblador\Mingw64\bin
+     5                                  ;assemble: -->> nasm -f win64 -o print1.o print1.asm -l print1.lst
+     6                                  ;link:	   -->> gcc -o print1 print1.o
+     7                                  ;run:      -->> print1
+     8                                  ;debugger: -->> x64dbg
+     9                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    10                                  ;-----------------------------------------
+    11                                  
+    12                                  ;file: legal.asm
+    13                                  ;El operando puede ser un registro de 16 o 64 bits, 
+    14                                  ;una posición de memoria de 16 o 64 bits o 
+    15                                  ;un valor inmediato de 8, 16 o 32 bits extendido a 64 bits.
+    16                                  extern printf,scanf		
+    17                                  segment .data
+    18 00000000 492063616E2073746F-     a	db "I can stop te lonliless : ",0
+    18 00000009 70207465206C6F6E6C-
+    18 00000012 696C657373203A2000 
+    19 0000001B 492063616E2073746F-     c	dd "I can stop te lonliless : %d",0
+    19 00000024 70207465206C6F6E6C-
+    19 0000002D 696C657373203A2025-
+    19 00000036 6400000000         
+    20 0000003B 256400                  fmt		db "%d",0
+    21                                  segment .bss
+    22 00000000 <res 00000004>          b resd 1
+    23                                  segment .text 
+    24                                  global main 					
+    25                                  main:
+    26                                  ;--------------------------
+    27 00000000 48B9-                   mov rcx,a
+    27 00000002 [0000000000000000] 
+    28 0000000A E8(00000000)            call printf
+    29                                  
+    30                                  
+    31 0000000F 48BA-                   mov rdx,b
+    31 00000011 [0000000000000000] 
+    32 00000019 48B9-                   mov rcx,fmt
+    32 0000001B [3B00000000000000] 
+    33 00000023 E8(00000000)            call scanf
+    34                                  
+    35                                  
+    36                                  
+    37                                  	
+    38 00000028 48B9-                   mov rcx,c
+    38 0000002A [1B00000000000000] 
+    39 00000032 488B1425[00000000]      mov rdx,[b]
+    40 0000003A E8(00000000)            call printf
+    41                                  	
+    42                                  ;--- 16-bit PUSH instruction-----------------
+    43 0000003F C3                      ret

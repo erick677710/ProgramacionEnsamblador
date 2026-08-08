@@ -1,0 +1,78 @@
+     1                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     2                                  ;assemble and link with 
+     3                                  ;set path
+     4                                  ;path C:\emsamblador\Mingw64\bin
+     5                                  ;assemble: -->> nasm -f win64 -o huevo.o huevo.asm -l huevo.lst
+     6                                  ;link:	   -->> gcc -o huevo huevo.o
+     7                                  ;run:      -->> huevo
+     8                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     9                                  ;-----------------------------------------
+    10                                  
+    11                                  ;file: huevo.asm (nombre programa)
+    12                                  ;registro: huevo
+    13                                  ;nombres y apellidos: Erick Raul Teran Tabera
+    14                                  
+    15                                  global main 
+    16                                  extern printf, scanf,gets		
+    17                                  
+    18                                  segment .data
+    19                                  ;aqui se declaran variables inicializadas
+    20 00000000 696E67726573612074-     msj1 db "ingresa tu nombre y apellido en MAYUSCULAS: ",0
+    20 00000009 75206E6F6D62726520-
+    20 00000012 79206170656C6C6964-
+    20 0000001B 6F20656E204D415955-
+    20 00000024 5343554C41533A2000 
+    21 0000002D 7375206E6F6D627265-     msj2 db "su nombre es : %s",10,0
+    21 00000036 206573203A2025730A-
+    21 0000003F 00                 
+    22                                  
+    23                                  
+    24                                  		
+    25                                  segment .bss
+    26                                  ;Block Started by Symbol(BSS) 
+    27                                  ;aqui van las variables declaradas pero sin inicializar
+    28 00000000 <res 0000003C>          nom resb 60
+    29                                  
+    30                                  segment .text 				
+    31                                  main:	
+    32                                  ;etiqueta que indica el comienzo del programa principal
+    33                                  ;aqui van las instrucciones
+    34                                  ;...
+    35 00000000 4883C420                add rsp,0x20
+    36 00000004 48B9-                   mov rcx,msj1
+    36 00000006 [0000000000000000] 
+    37 0000000E E8(00000000)            call printf
+    38 00000013 48B9-                   mov rcx,nom
+    38 00000015 [0000000000000000] 
+    39 0000001D E8(00000000)            call gets
+    40                                  
+    41 00000022 48B8-                   mov rax,nom
+    41 00000024 [0000000000000000] 
+    42                                  ciclo:
+    43 0000002C 488B18                  	mov rbx,[rax]
+    44 0000002F 4883FB00                	cmp rbx,0
+    45 00000033 740F                    	jz fin
+    46                                  	
+    47 00000035 488B18                  	mov rbx,[rax]
+    48 00000038 4883CB20                	or rbx,0x20
+    49 0000003C 488918                  	mov [rax],rbx
+    50 0000003F 48FFC0                  	inc rax
+    51 00000042 EBE8                    	jmp ciclo
+    52                                  fin:
+    53 00000044 48B9-                   mov rcx,msj2
+    53 00000046 [2D00000000000000] 
+    54 0000004E 48BA-                   mov rdx,nom
+    54 00000050 [0000000000000000] 
+    55 00000058 E8(00000000)            call printf
+    56 0000005D 4883EC20                sub rsp,0x20
+    57                                  ;...
+    58 00000061 C3                      ret
+    59                                  
+    60                                  
+    61                                  ;--------------------------------------
+    62                                  ;============ subrutina ===============
+    63                                  ;--------------------------------------
+    64                                  ;aqui instrucciones subrutina (funcion)
+    65                                  ;...
+    66                                  ;...
+    67 00000062 C3                      ret

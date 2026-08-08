@@ -1,0 +1,16 @@
+-- 1. Cual es el valor de X despues de ejecutar T1 
+-- 2. Cual el es valor de X despues de ejecutar T2
+-- 3. Cual es el valor de X despues de ejecutar T1 y T2
+-- 4. Marque la propiedad ACID que se viola despues de ejecutar T1 y T2
+--    a) Atomicidad
+--    b) Consistencia
+--    c) Aislamiento (Isolation)
+--    d) Durabilidad
+--    e) Ninguna
+-- 5. Cual de los siguientes problemas se presentan despues de ejecutar T1 y T2
+--    a)Problema de la Actualizacion Perdida
+--    b)Problema de la Lectura Sucia
+--    c)Problema del Resumen Incorrecto
+--    d)Problema de la Lectura NO Repetible
+--    e)Ninguna
+-- 6. Es SERIALIZABLE el plan?

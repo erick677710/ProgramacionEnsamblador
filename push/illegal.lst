@@ -1,0 +1,44 @@
+     1                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     2                                  ;assemble and link with 
+     3                                  ;set path
+     4                                  ;path C:\emsamblador\Mingw64\bin
+     5                                  ;assemble: -->> nasm -f win64 -o illegal.o illegal.asm -l illegal.lst
+     6                                  ;link:	   -->> gcc -o illegal illegal.o
+     7                                  ;run:      -->> illegal
+     8                                  ;debugger: -->> x64dbg
+     9                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    10                                  ;-----------------------------------------
+    11                                  
+    12                                  ;file: SWAP.asm
+    13                                  
+    14                                  ;---------------------------------------------------------
+    15                                  ;El operando puede ser un registro de 16 o 64 bits, 
+    16                                  ;una posición de memoria de 16 o 64 bits o 
+    17                                  ;un valor inmediato de 8, 16 o 32 bits extendido a 64 bits.
+    18                                  ;----------------------------------------------------------
+    19                                  		
+    20                                  segment .data
+    21 00000000 0A                      a	db  10
+    22 00000001 14000000                b	dd	20	
+    23                                  	
+    24                                  segment .bss
+    25                                  
+    26                                  segment .text 
+    27                                  global main 					
+    28                                  main:
+    29                                  ;--------------------
+    30                                  	push    al					;no soportado: registro 8-bits
+    30          ******************       error: invalid combination of opcode and operands
+    31                                  	push    eax					;no soportado: registro 32-bits
+    31          ******************       error: instruction not supported in 64-bit mode
+    32                                  	push    byte[a]				;no soportado: memoria 8-bits
+    32          ******************       error: invalid combination of opcode and operands
+    33                                  	push    dword[b]			;no soportado: memoria 32-bits
+    33          ******************       error: instruction not supported in 64-bit mode
+    34 00000000 6A00                    	push    0x0_100_000_000     ;no soportado: valor inmediato 64-bits 
+    34          ******************       warning: signed dword value exceeds bounds
+    35 00000002 C3                      ret
+    36                                  
+    37                                  
+    38                                  
+    39                                  
