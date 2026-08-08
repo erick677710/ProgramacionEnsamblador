@@ -1,0 +1,81 @@
+     1                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     2                                  ;assemble and link with 
+     3                                  ;set path
+     4                                  ;path C:\emsamblador\Mingw64\bin
+     5                                  ;assemble: -->> nasm -f win64 -o mul-2-3operandos.o mul-2-3operandos.asm -l mul-2-3operandos.lst
+     6                                  ;link:	   -->> gcc -o mul-2-3operandos mul-2-3operandos.o
+     7                                  ;run:      -->> mul-2-3operandos%%%%%%%%%%%%
+     8                                  ;-----------------------------------------
+     9                                  
+    10                                  ;file: mul-2-3operandos.asm
+    11                                  
+    12                                  extern printf, scanf		
+    13                                  
+    14                                  segment .data
+    15                                  ;aqui se declaran variables inicializadas
+    16 00000000 0A000000                x	DD 10	    
+    17                                  	
+    18                                  segment .text 
+    19                                  global main 					
+    20                                  main:
+    21                                  ;---------------------------------------
+    22 00000000 B819000000              mov eax, 25
+    23 00000005 BB1E000000              mov ebx, 30
+    24 0000000A B923000000              mov ecx, 35
+    25                                  
+    26                                  ;--2 operandos----------------------	
+    27 0000000F 6BC064                  imul eax, 100	;multiplica eax por 100  lenguaje "C" -> eax *= 100
+    28 00000012 0FAF0425[00000000]      imul eax, [x]	;multiplica eax por [x]
+    29 0000001A 0FAFD9                  imul ebx , ecx	;multiplica ebx por ecx               
+    30                                  			
+    31                                  ;--3 operandos----------------------
+    32 0000001D BB1E000000              mov ebx, 30
+    33 00000022 6B1C25[00000000]64      imul ebx , [x] , 100 ;almacena 100*x en ebx
+    34 0000002A 6BD332                  imul edx , ebx , 50	 ;almacena 50*ebx in edx
+    35                                  
+    36                                  ;-----------------------------------------
+    37                                  ;----Sin Signo----------------------------	
+    38 0000002D B878563412              mov eax, 012345678h
+    39 00000032 BA78563412              mov edx, 012345678h
+    40 00000037 F7E2                    mul edx
+    41                                  ;El resultado de esta multiplicacion es:
+    42                                  ;0x12345678 * 0x12345678 = 0x014B66DC1DF4D840
+    43                                  ;la cual produce los siguientes valores en los registros edx and eax:
+    44                                  ;edx = 0x014B66DC
+    45                                  ;eax = 0x1DF4D840
+    46                                  
+    47                                  ;-----Con Signo------------------------------
+    48 00000039 B8FEFFFFFF              mov eax, -2
+    49 0000003E BBFEFFFFFF              mov ebx, -2
+    50 00000043 F7EB                    imul ebx
+    51                                  ;edx:eax = (-2) * (-2) = 4 = 0x0000000000000004
+    52                                  
+    53                                  ;Ahora usaremos el entero con signo positivo más grande posible:
+    54 00000045 BFFFFFFF7F              mov edi, +2147483647
+    55 0000004A BEFFFFFF7F              mov esi, +2147483647
+    56                                  
+    57                                  ;esta instruccion almacena el resultado en edi y descarta los 32 bits superiores:
+    58 0000004F 0FAFFE                  imul edi, esi
+    59                                  ;2147483647*2147483647=4611686014132420609=0x3FFFFFFF00000001
+    60                                  ;edi = 0x00000001
+    61                                  ;0x3FFFFFFF se descarta.
+    62                                  
+    63 00000052 B80A000000              mov eax, 10
+    64 00000057 BB14000000              mov ebx, 20
+    65                                  
+    66                                  ;3 operandos (destino y 2 operandos fuentes).
+    67                                  ;The three-operand form is the only form where the destination register
+    68                                  ;is not one of the factors in the product.
+    69                                  ;this simply adds another factor to the multiplication:
+    70 0000005C 6BC303                  imul eax, ebx, 3
+    71                                  ;eax= ebx*3 = 20*3 = 60 = 0x3C
+    72                                  ;upper 32 bit are discarded but they are 0 anyways, so:
+    73                                  ;eax = 60 = 0x0000003C
+    74 0000005F B8FEFFFFFF              mov eax, -2
+    75 00000064 BBFEFFFFFF              mov ebx, -2
+    76 00000069 F7E3                    mul ebx
+    77 0000006B C3                      ret
+    78                                  
+    79                                  
+    80                                  
+    81                                  

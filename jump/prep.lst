@@ -1,0 +1,41 @@
+     1                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     2                                  ;assemble and link with 
+     3                                  ;set path
+     4                                  ;path C:\emsamblador\Mingw64\bin
+     5                                  ;assemble: -->> nasm -f win64 -o prep.o prep.asm -l prep.lst
+     6                                  ;link:	   -->> gcc -o prep prep.o
+     7                                  ;run:      -->> prep
+     8                                  ;debugger: -->> x64dbg
+     9                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    10                                  ;-----------------------------------------
+    11                                  
+    12                                  ;file: negativoSF
+    13                                  
+    14                                  ;INSTRUCCIÓN -> JS (jump if negative) SF=1		
+    15                                  
+    16                                  segment .data
+    17                                  		
+    18                                  segment .bss
+    19 00000000 <res 00000001>          num_neg	RESB  1
+    20                                  
+    21                                  segment .text 
+    22                                  global main 					
+    23                                  main:
+    24                                  ;--------------------------
+    25 00000000 4831C0                  xor rax,rax
+    26 00000003 4831DB                  xor rbx,rbx
+    27 00000006 4831C9                  xor rcx,rcx
+    28 00000009 B800000000              mov rax,0
+    29 0000000E B902000000              mov rcx,2
+    30 00000013 4883E80A                sub rax,10
+    31 00000017 7802                        JS pala
+    32 00000019 EB0F                        jmp fin
+    33                                  pala:
+    34 0000001B F6F9                    	idiv cl
+    35 0000001D 6683FA00                	cmp dx,0
+    36 00000021 7402                    	jz xd
+    37 00000023 EB05                    	jmp fin
+    38                                  xd:
+    39 00000025 B80A000000                  mov rax,10
+    40                                  fin:	
+    41 0000002A C3                      	RET

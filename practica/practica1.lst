@@ -1,0 +1,52 @@
+     1                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     2                                  ;assemble and link with 
+     3                                  ;set path
+     4                                  ;path C:\emsamblador\Mingw64\bin
+     5                                  ;assemble: -->> nasm -f win64 -o practica1.o practica1.asm -l practica1.lst
+     6                                  ;link:	   -->> gcc -o practica1 practica1.o
+     7                                  ;run:      -->> practica1
+     8                                  ;debugger: -->> x64dbg
+     9                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    10                                  ;-----------------------------------------
+    11                                  
+    12                                  ;file: legal.asm
+    13                                  ;El operando puede ser un registro de 16 o 64 bits, 
+    14                                  ;una posición de memoria de 16 o 64 bits o 
+    15                                  ;un valor inmediato de 8, 16 o 32 bits extendido a 64 bits.
+    16                                  		
+    17                                  segment .data
+    18 00000000 0600000000000000        rango	dq  6
+    19                                  
+    20                                  segment .bss
+    21 00000000 <res 00000008>          x resq 1
+    22                                  segment .text 
+    23                                  global main 					
+    24                                  main:
+    25 00000000 4831C0                  xor rax,rax
+    26 00000003 4831C9                  xor rcx,rcx
+    27 00000006 4831D2                  xor rdx,rdx
+    28 00000009 4831DB                  xor rbx,rbx
+    29 0000000C 4D31C0                  xor r8,r8
+    30                                  
+    31                                  
+    32 0000000F 488B0C25[00000000]      mov rcx,[rango]
+    33 00000017 BA01000000              mov rdx,1
+    34 0000001C E809000000              call ee1
+    35 00000021 48890425[00000000]      mov  qword[x],rax
+    36 00000029 C3                      ret
+    37                                  ee1 
+    37          ******************       warning: label alone on a line without a colon might be in error
+    38 0000002A 4839CA                  cmp rdx,rcx
+    39 0000002D 7714                    ja fin
+    40                                  
+    41 0000002F 4989D0                  mov r8,rdx
+    42                                  
+    43 00000032 4D0FAFC0                imul r8,r8
+    44 00000036 4C0FAFC2                imul r8,rdx
+    45                                  
+    46 0000003A 4C01C0                  add rax,r8
+    47 0000003D 4883C202                add rdx,2
+    48                                  
+    49 00000041 7AE7                    jp ee1
+    50                                  
+    51 00000043 C3                      fin ret

@@ -1,0 +1,114 @@
+     1                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     2                                  ;assemble and link with: 
+     3                                  ;assemble: -->> nasm -f win64 -o paralelepipedo.o paralelepipedo.asm -l paralelepipedo.lst
+     4                                  ;link:	   -->> gcc -o paralelepipedo paralelepipedo.o
+     5                                  ;run:      -->> paralelepipedo
+     6                                  ;debugger: -->> x64dbg paralelepipedo
+     7                                  ;Direccion de incicio 401550
+     8                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     9                                  ;-----------------------------------------
+    10                                  
+    11                                  ;file: paralelepipedo.asm (nombre programa)
+    12                                  ;registro:
+    13                                  ;nombres y apellidos:
+    14                                  
+    15                                  global main 
+    16                                  extern printf, scanf		
+    17                                  
+    18                                  segment .data
+    19                                  ;aqui se declaran variables inicializadas
+    20 00000000 0A2D2D2D2D2D2D2D2D-     	msj		db	10, "------------------------", 10, 0
+    20 00000009 2D2D2D2D2D2D2D2D2D-
+    20 00000012 2D2D2D2D2D2D2D0A00 
+    21 0000001B 4C6172676F20413A20-     	msjA	db	"Largo A: ", 0
+    21 00000024 00                 
+    22 00000025 416E63686F20423A20-     	msjB	db 	"Ancho B: ", 0
+    22 0000002E 00                 
+    23 0000002F 416C7475726120433A-     	msjC	db	"Altura C:", 0
+    23 00000038 00                 
+    24 00000039 417265613A2025640A-     	msjAr	db	"Area: %d", 10, 0
+    24 00000042 00                 
+    25 00000043 256400                  	fmt		db	"%d", 0
+    26                                  segment .bss
+    27                                  ;Block Started by Symbol(BSS) 
+    28                                  ;aqui van las variables declaradas pero sin inicializar
+    29 00000000 ????????                	area	resd	1
+    30 00000004 ????????                	a		resd	1
+    31 00000008 ????????                	b		resd	1
+    32 0000000C ????????                	c		resd 	1
+    33                                  segment .text 				
+    34                                  main:	
+    35                                  ;etiqueta que indica el comienzo del programa principal
+    36                                  ;aqui van las instrucciones
+    37 00000000 4883EC20                	sub rsp, 0x20
+    38                                  	
+    39 00000004 48B9-                   	mov rcx, msj
+    39 00000006 [0000000000000000] 
+    40 0000000E E8(00000000)            	call printf
+    41                                  	
+    42 00000013 48B9-                   	mov rcx, msjA
+    42 00000015 [1B00000000000000] 
+    43 0000001D E8(00000000)            	call printf
+    44                                  	
+    45 00000022 48B9-                   	mov rcx, fmt
+    45 00000024 [4300000000000000] 
+    46 0000002C 48BA-                   	mov rdx, a
+    46 0000002E [0400000000000000] 
+    47 00000036 E8(00000000)            	call scanf
+    48                                  	
+    49 0000003B 48B9-                   	mov rcx, msjB
+    49 0000003D [2500000000000000] 
+    50 00000045 E8(00000000)            	call printf
+    51                                  	
+    52 0000004A 48B9-                   	mov rcx, fmt
+    52 0000004C [4300000000000000] 
+    53 00000054 48BA-                   	mov rdx, b
+    53 00000056 [0800000000000000] 
+    54 0000005E E8(00000000)            	call scanf
+    55                                  	
+    56 00000063 48B9-                   	mov rcx, msjC
+    56 00000065 [2F00000000000000] 
+    57 0000006D E8(00000000)            	call printf
+    58                                  	
+    59 00000072 48B9-                   	mov rcx, fmt
+    59 00000074 [4300000000000000] 
+    60 0000007C 48BA-                   	mov rdx, c
+    60 0000007E [0C00000000000000] 
+    61 00000086 E8(00000000)            	call scanf
+    62                                  	
+    63 0000008B 8B0C25[04000000]        	mov ecx, [a]
+    64 00000092 8B1425[08000000]        	mov edx, [b]
+    65 00000099 448B0425[0C000000]      	mov r8d, [c]
+    66 000000A1 E832000000              	call Area
+    67 000000A6 890425[00000000]        	mov [area], eax
+    68                                  	
+    69 000000AD 48B9-                   	mov rcx, msjAr
+    69 000000AF [3900000000000000] 
+    70 000000B7 488B1425[00000000]      	mov rdx, [area]
+    71 000000BF E8(00000000)            	call printf
+    72                                  	
+    73 000000C4 48B9-                   	mov rcx, msj
+    73 000000C6 [0000000000000000] 
+    74 000000CE E8(00000000)            	call printf
+    75                                  	
+    76 000000D3 4883C420                	add rsp, 0x20
+    77 000000D7 C3                      ret
+    78                                  
+    79                                  
+    80                                  ;--------------------------------------
+    81                                  ;============ subrutina ===============
+    82                                  ;--------------------------------------
+    83                                  ;aqui paralelepipedo subrutina (funcion)
+    84                                  ;Area = 2*(A*B + A*C + B*C).
+    85                                  	Area:
+    86 000000D8 89C8                    		mov eax, ecx
+    87 000000DA 0FAFCA                  		imul ecx, edx	;a*b
+    88 000000DD 410FAFC0                		imul eax, r8d	;a*c
+    89 000000E1 410FAFD0                		imul edx, r8d	;b*c
+    90 000000E5 4D31E4                  		xor r12, r12
+    91 000000E8 4101CC                  		add r12d, ecx
+    92 000000EB 4101C4                  		add r12d, eax
+    93 000000EE 4101D4                  		add r12d, edx
+    94 000000F1 456BE402                		imul r12d, 2
+    95 000000F5 4489E0                  		mov eax, r12d
+    96 000000F8 C3                      	ret

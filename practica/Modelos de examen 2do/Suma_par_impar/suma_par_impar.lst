@@ -1,0 +1,161 @@
+     1                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     2                                  ;assemble and link with: 
+     3                                  ;assemble: -->> nasm -f win64 -o suma_par_impar.o suma_par_impar.asm -l suma_par_impar.lst
+     4                                  ;link:	   -->> gcc -o suma_par_impar suma_par_impar.o
+     5                                  ;run:      -->> suma_par_impar
+     6                                  ;debugger: -->> x64dbg suma_par_impar
+     7                                  ;Direccion de incicio 401550
+     8                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     9                                  ;-----------------------------------------
+    10                                  
+    11                                  ;file: suma_par_impar.asm (nombre programa)
+    12                                  ;registro:
+    13                                  ;nombres y apellidos:
+    14                                  
+    15                                  global main 
+    16                                  extern printf, scanf		
+    17                                  
+    18                                  segment .data
+    19                                  ;aqui se declaran variables inicializadas
+    20 00000000 0A4269656E76656E69-     	msj		db	10, "Bienvenido", 10, "------------", 10, 0
+    20 00000009 646F0A2D2D2D2D2D2D-
+    20 00000012 2D2D2D2D2D2D0A00   
+    21 0000001A 496E6772657365206C-     	msj1	db	"Ingrese la cantidad de elementos (max 50): ", 0
+    21 00000023 612063616E74696461-
+    21 0000002C 6420646520656C656D-
+    21 00000035 656E746F7320286D61-
+    21 0000003E 78203530293A2000   
+    22 00000046 496E67726573652065-     	msj2	db	"Ingrese el elementos %d: ", 0
+    22 0000004F 6C20656C656D656E74-
+    22 00000058 6F732025643A2000   
+    23 00000060 4C612073756D612064-     	msj3	db	"La suma de los elementos pares es: %d", 0
+    23 00000069 65206C6F7320656C65-
+    23 00000072 6D656E746F73207061-
+    23 0000007B 7265732065733A2025-
+    23 00000084 6400               
+    24 00000086 4C612073756D612064-     	msj4	db	"La suma de los elementos impares es: %d", 0
+    24 0000008F 65206C6F7320656C65-
+    24 00000098 6D656E746F7320696D-
+    24 000000A1 70617265732065733A-
+    24 000000AA 20256400           
+    25 000000AE 256400                  	fmt		db	"%d",0
+    26                                  	
+    27                                  segment .bss
+    28                                  ;Block Started by Symbol(BSS) 
+    29                                  ;aqui van las variables declaradas pero sin inicializar
+    30 00000000 ????????                	cant	resd	1
+    31 00000004 <res C8h>               	vec		resd	50
+    32 000000CC ????????                	sump	resd	1
+    33 000000D0 ????????                	sumimp	resd	1
+    34                                  segment .text 				
+    35                                  main:	
+    36                                  ;etiqueta que indica el comienzo del programa principal
+    37                                  ;aqui van las instrucciones
+    38 00000000 4883EC20                	sub rsp, 0x20
+    39                                  	
+    40 00000004 48B9-                   	mov rcx, msj
+    40 00000006 [0000000000000000] 
+    41 0000000E E8(00000000)            	call printf
+    42                                  	
+    43 00000013 48B9-                   	mov rcx, msj1
+    43 00000015 [1A00000000000000] 
+    44 0000001D E8(00000000)            	call printf
+    45                                  	
+    46 00000022 48B9-                   	mov rcx, fmt
+    46 00000024 [AE00000000000000] 
+    47 0000002C 48BA-                   	mov rdx, cant
+    47 0000002E [0000000000000000] 
+    48 00000036 E8(00000000)            	call scanf
+    49                                  	
+    50                                  
+    51                                  
+    52 0000003B 48BB-                   	mov rbx, vec
+    52 0000003D [0400000000000000] 
+    53 00000045 4D31ED                  	xor	r13, r13
+    54                                  	
+    55                                  	for:
+    56 00000048 443B2C25[00000000]      		cmp	r13d, [cant]
+    57 00000050 7C02                    		jl cierto
+    58 00000052 EB2D                    		jmp fin
+    59                                  		cierto:
+    60                                  		
+    61 00000054 48B9-                   		mov rcx, msj2
+    61 00000056 [4600000000000000] 
+    62 0000005E 4C89EA                  		mov rdx, r13
+    63 00000061 E8(00000000)            		call printf
+    64                                  		
+    65 00000066 48B9-                   		mov rcx, fmt
+    65 00000068 [AE00000000000000] 
+    66 00000070 4889DA                  		mov rdx, rbx
+    67 00000073 E8(00000000)            		call scanf
+    68                                  		
+    69 00000078 4883C304                		add rbx, 4
+    70 0000007C 49FFC5                  		inc r13
+    71 0000007F EBC7                    		jmp for
+    72                                  	fin:
+    73                                  	
+    74 00000081 8B0C25[00000000]        	mov ecx, [cant]
+    75 00000088 48BA-                   	mov rdx, vec
+    75 0000008A [0400000000000000] 
+    76 00000092 E857000000              	call sumaPar
+    77 00000097 890425[CC000000]        	mov [sump], eax
+    78                                  	
+    79 0000009E 48B9-                   	mov rcx, msj3
+    79 000000A0 [6000000000000000] 
+    80 000000A8 488B1425[CC000000]      	mov rdx, [sump]
+    81 000000B0 E8(00000000)            	call printf
+    82                                  	
+    83 000000B5 8B0C25[00000000]        	mov ecx, [cant]
+    84 000000BC 48BA-                   	mov rdx, vec
+    84 000000BE [0400000000000000] 
+    85 000000C6 E849000000              	call sumaImpar
+    86 000000CB 890425[D0000000]        	mov [sumimp], eax
+    87                                  	
+    88 000000D2 48B9-                   	mov rcx, msj4
+    88 000000D4 [8600000000000000] 
+    89 000000DC 488B1425[D0000000]      	mov rdx, [sumimp]
+    90 000000E4 E8(00000000)            	call printf
+    91                                  	
+    92 000000E9 4883C420                	add rsp, 0x20
+    93 000000ED C3                      ret
+    94                                  
+    95                                  
+    96                                  ;--------------------------------------
+    97                                  ;============ subrutina ===============
+    98                                  ;--------------------------------------
+    99                                  
+   100                                  	sumaPar:
+   101 000000EE 31DB                    		xor ebx, ebx	;acumulador	
+   102 000000F0 4989D0                  		mov r8, rdx
+   103                                  		while:
+   104 000000F3 458B18                  			mov r11d, [r8]
+   105 000000F6 4489D8                  			mov eax, r11d
+   106 000000F9 41BD02000000            			mov r13d, 2
+   107 000000FF 99                      			cdq
+   108 00000100 41F7FD                  			idiv r13d
+   109 00000103 83FA01                  			cmp edx, 1
+   110 00000106 7403                    			je npar
+   111 00000108 4401DB                  				add ebx, r11d
+   112                                  			npar:
+   113 0000010B 4983C004                			add r8, 4
+   114 0000010F E2E2                    		loop while
+   115 00000111 89D8                    		mov eax, ebx
+   116 00000113 C3                      	ret
+   117                                  	
+   118                                  	sumaImpar:
+   119 00000114 31DB                    		xor ebx, ebx	;acumulador	
+   120 00000116 4989D0                  		mov r8, rdx
+   121                                  		while1:
+   122 00000119 458B18                  			mov r11d, [r8]
+   123 0000011C 4489D8                  			mov eax, r11d
+   124 0000011F 41BD02000000            			mov r13d, 2
+   125 00000125 99                      			cdq
+   126 00000126 41F7FD                  			idiv r13d
+   127 00000129 83FA00                  			cmp edx, 0
+   128 0000012C 7403                    			je npar1
+   129 0000012E 4401DB                  				add ebx, r11d
+   130                                  			npar1:
+   131 00000131 4983C004                			add r8, 4
+   132 00000135 E2E2                    		loop while1
+   133 00000137 89D8                    		mov eax, ebx
+   134 00000139 C3                      	ret

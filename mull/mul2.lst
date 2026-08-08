@@ -1,0 +1,79 @@
+     1                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     2                                  ;assemble and link with 
+     3                                  ;set path
+     4                                  ;path C:\emsamblador\Mingw64\bin
+     5                                  ;assemble: -->> nasm -f win64 -o mul2.o mul2.asm -l mul2.lst
+     6                                  ;link:	   -->> gcc -o mul2 mul2.o
+     7                                  ;run:      -->> mul2
+     8                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     9                                  ;-----------------------------------------
+    10                                  
+    11                                  segment .data
+    12 00000000 2A                      bNumA	 db 42
+    13 00000001 49                      bNumB	 db 73
+    14                                  
+    15 00000002 E110                    wNumA	 dw 4321
+    16 00000004 D204                    wNumB	 dw 1234
+    17                                  
+    18 00000006 10A40000                dNumA	 dd 42000
+    19 0000000A 281D0100                dNumB	 dd 73000
+    20                                  
+    21 0000000E A068060000000000        qNumA	 dq 420000
+    22 00000016 90230B0000000000        qNumB	 dq 730000
+    23                                  
+    24                                  ;Para realizar las operaciones básicas de:
+    25                                  
+    26                                  ;wAns = bNumA^2 ; bNumA al cuadrado.
+    27                                  ;bAns1 = bNumA * bNumB
+    28                                  ;wAns1 = bNumA * bNumB
+    29                                  ;wAns2 = wNumA * wNumB
+    30                                  ;dAns2 = wNumA * wNumB
+    31                                  ;dAns3 = dNumA * dNumB
+    32                                  ;qAns3 = dNumA * dNumB
+    33                                  ;qAns4 = qNumA * qNumB
+    34                                  ;dqAns4 = qNumA * qNumB	
+    35                                  	
+    36                                  segment .bss
+    37 00000000 <res 00000002>          wAns	 resw 1
+    38 00000002 <res 00000002>          wAns1	 resw 1
+    39 00000004 <res 00000004>          dAns2	 resd 1
+    40 00000008 <res 00000008>          qAns3	 resq 1 
+    41 00000010 <res 00000008>          dqAns4	 resq 1
+    42                                  
+    43                                  segment .text 
+    44                                  
+    45                                  global main 					
+    46                                  main:
+    47                                  ;-----------------------------------	
+    48 00000000 8A0425[00000000]        	mov al, [bNumA]
+    49 00000007 F6E0                    	mul al			 ; resultado in ax
+    50 00000009 66890425[00000000]      	mov [wAns], ax
+    51                                  
+    52 00000011 90                      	nop
+    53 00000012 8A0425[00000000]        	mov al, [bNumA]
+    54 00000019 F62425[01000000]        	mul byte [bNumB] ; resultado in ax
+    55 00000020 66890425[02000000]      	mov [wAns1], ax
+    56                                  
+    57 00000028 90                      	nop
+    58 00000029 668B0425[02000000]      	mov ax, [wNumA]
+    59 00000031 66F72425[04000000]      	mul word [wNumB] ; resultado in dx:ax
+    60 00000039 66890425[04000000]      	mov [dAns2], ax
+    61 00000041 66891425[06000000]      	mov [dAns2+2], dx
+    62                                  
+    63 00000049 90                      	nop
+    64 0000004A 8B0425[06000000]        	mov eax, [dNumA]
+    65 00000051 F72425[0A000000]        	mul dword [dNumB] ; resultado in edx:eax
+    66 00000058 890425[08000000]        	mov [qAns3], eax
+    67 0000005F 891425[0C000000]        	mov [qAns3+4], edx
+    68                                  
+    69 00000066 90                      	nop
+    70 00000067 488B0425[0E000000]      	mov rax, [qNumA]
+    71 0000006F F72425[16000000]        	mul dword [qNumB] ; resultado in rdx:rax
+    72 00000076 48890425[10000000]      	mov [dqAns4], rax
+    73 0000007E 48891425[18000000]      	mov [dqAns4+8], rdx
+    74 00000086 C3                      	ret
+    75                                  
+    76                                  
+    77                                  
+    78                                  
+    79                                  

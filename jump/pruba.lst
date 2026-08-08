@@ -1,0 +1,33 @@
+     1                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     2                                  ;assemble and link with 
+     3                                  ;set path
+     4                                  ;path C:\emsamblador\Mingw64\bin
+     5                                  ;assemble: -->> nasm -f win64 -o pruba.o pruba.asm -l pruba.lst
+     6                                  ;link:	   -->> gcc64 -o pruba pruba.o
+     7                                  ;run:      -->> pruba
+     8                                  ;debugger: -->> x64dbg
+     9                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    10                                  ;-----------------------------------------
+    11                                  
+    12                                  ;file: negativoSF
+    13                                  
+    14                                  ;INSTRUCCIÓN -> JS (jump if negative) SF=1		
+    15                                  
+    16                                  segment .data
+    17                                  		
+    18                                  segment .bss
+    19 00000000 <res 00000001>          num_neg	RESB  1
+    20                                  
+    21                                  segment .text 
+    22                                  global main 					
+    23                                  main:
+    24                                  ;--------------------------
+    25 00000000 B00F                    		 MOV AL, 15
+    26 00000002 2C61                    		 SUB AL, 97		;AL = -82	->  CF=1, ZF=0, SF=1, OF=0 
+    27 00000004 7902                    		 JNS negativo	;salta a la etiqueta "negativo" si SF=1
+    28 00000006 EB07                    			JMP fin
+    29                                  negativo:
+    30 00000008 880425[00000000]        		 MOV [num_neg], AL	
+    31                                  fin:
+    32 0000000F C3                      		 RET
+    33                                  
